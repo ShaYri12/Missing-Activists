@@ -35,7 +35,7 @@ const Header = () => {
         <div className='flex flex-col gap-[40px] items-center justify-center w-auto text-[16px] font-[700] leading-[19.2px] text-[#181818]'>
           <Link href="/" className="block rounded-md hover:underline" onClick={toggleMenu}>Home</Link>
           <Link href="/" className="block rounded-md hover:underline" onClick={toggleMenu}>Report</Link>
-          <Link href="/" className="block rounded-md hover:underline" onClick={toggleMenu}>About Us</Link>
+          <Link href="/aboutus" className="block rounded-md hover:underline" onClick={toggleMenu}>About Us</Link>
           <Link href="/" className="block rounded-md hover:underline" onClick={toggleMenu}>Contact</Link>
         </div>
 
