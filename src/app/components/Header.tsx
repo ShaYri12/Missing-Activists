@@ -14,7 +14,7 @@ const Header = () => {
       <div className="max-w-6xl mx-auto px-[15px]">
         <div className="flex justify-between h-[68px]">
           <div className="flex items-center">
-              <a href="#" className="flex font-[400] text-[16px] leading-[16px]">
+              <a href="/" className="flex font-[400] text-[16px] leading-[16px]">
                 www.<span className="text-[#E31F1F] font-[700]">missing</span>activists.org
               </a>
           </div>

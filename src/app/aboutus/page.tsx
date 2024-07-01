@@ -1,7 +1,9 @@
 import React from "react";
+import Footer from '../components/Footer';
 
 const AboutUs = () => {
   return (
+    <>
     <div className="bg-white text-[#000000] px-[15px] py-[24px] flex flex-col gap-[24px]">
       <h1 className="text-[32px] font-[700] leading-[38.4px]">Help Find Missing Activists</h1>
       <section className="text-[12px] leading-[16.8px]">
@@ -96,11 +98,13 @@ const AboutUs = () => {
           You will receive a prompt on your Safaricom number.
         </p>
 
-        <button className="w-full bg-[#000000] text-[#ffffff] text-[14px] font-[700] leading-[19.6px] px-[16px] py-[10px] rounded-[5px] gap-[10px] transition ease-out duration-300 hover:opacity-[0.8]">
+        <button className="w-full mb-[54px] bg-[#000000] text-[#ffffff] text-[14px] font-[700] leading-[19.6px] px-[16px] py-[10px] rounded-[5px] gap-[10px] transition ease-out duration-300 hover:opacity-[0.8]">
           Pay
         </button>
       </section>
     </div>
+    <Footer/>
+    </>
   );
 };
 

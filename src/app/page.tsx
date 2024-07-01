@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react';
+import Footer from './components/Footer';
 
 interface Person {
   id: number;
@@ -48,6 +49,7 @@ const Home = () => {
   );
 
   return (
+    <>
     <div className="px-[15px] py-[24px]">
       <input
         type="text"
@@ -77,6 +79,8 @@ const Home = () => {
         ))}
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 
