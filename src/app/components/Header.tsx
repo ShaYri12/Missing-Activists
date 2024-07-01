@@ -13,7 +13,7 @@ const Header = () => {
     <nav className="bg-white sticky top-0 shadow-custom z-10">
       <div className="max-w-6xl mx-auto px-[15px]">
         <div className="flex justify-between h-[68px]">
-          <div className="flex items-center">
+          <div className="flex items-center text-[#000000]">
               <a href="/" className="flex font-[400] text-[16px] leading-[16px]">
                 www.<span className="text-[#E31F1F] font-[700]">missing</span>activists.org
               </a>
