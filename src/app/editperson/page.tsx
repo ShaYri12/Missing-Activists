@@ -12,6 +12,7 @@ const EditPerson = () => {
   const [fileName3, setFileName3] = useState<string>('');
   const [timePlaceholderVisible, setTimePlaceholderVisible] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
+  const [status, setStatus] = useState<string>(''); // State for status dropdown
 
   const handleClick = (ref: React.MutableRefObject<HTMLInputElement | null>) => {
     if (ref.current) {
@@ -38,6 +39,10 @@ const EditPerson = () => {
     }
   };
 
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setStatus(e.target.value);
+  };
+
   return (
     <div className="min-h-screen text-[#000000] flex flex-col items-center justify-center bg-white">
       <div className="bg-white px-[15px] py-[24px] flex flex-col gap-[16px] w-full max-w-lg">
@@ -59,6 +64,11 @@ const EditPerson = () => {
             <input
               type="number"
               placeholder="Age"
+              className="w-full py-[10px] px-[13px] bg-[#EEF3F7] rounded-[5px] text-[14px] font-[400] leading-[19.6px] placeholder-[#00000066]"
+            />
+            <input
+              type="text"
+              placeholder="Gender"
               className="w-full py-[10px] px-[13px] bg-[#EEF3F7] rounded-[5px] text-[14px] font-[400] leading-[19.6px] placeholder-[#00000066]"
             />
             <input
@@ -162,7 +172,20 @@ const EditPerson = () => {
               style={{ display: 'none' }}
               onChange={(e) => handleFileChange(e, setFileName3)}
             />
+
+            {/* Status dropdown */}
+            <select
+              className={`w-full py-[10px] px-[13px] bg-[#EEF3F7] rounded-[5px] text-[14px] font-[400] leading-[19.6px] ${status === "" ? "text-[#00000066]" : ""}`}
+              value={status}
+              onChange={handleStatusChange}
+            >
+              <option className='text-[#000000]' value="">Status (Dropdown)</option>
+              <option className='text-[#000000]' value="missing">Missing</option>
+              <option className='text-[#000000]' value="found">Found</option>
+              <option className='text-[#000000]' value="deceased">Deceased</option>
+            </select>
           </div>
+
           <button
             type="submit"
             className="w-full bg-[#000000] text-[#ffffff] text-[14px] font-[700] leading-[19.6px] px-[16px] py-[10px] rounded-[5px] gap-[10px] transition ease-out duration-300 hover:opacity-[0.8]"
