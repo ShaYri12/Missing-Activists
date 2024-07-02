@@ -15,7 +15,7 @@ const PersonDetail = ({ params }: { params: { id: string } }) => {
       age: 27,
       images: [
         "/assets/jacob.png",
-        "/assets/john.png",
+        "/assets/jacob.png",
         "/assets/jacob.png",
       ],
       status: "Missing",
@@ -35,7 +35,7 @@ const PersonDetail = ({ params }: { params: { id: string } }) => {
       age: 27,
       images: [
         "/assets/mercy.png",
-        "/assets/jacob.png",
+        "/assets/mercy.png",
         "/assets/mercy.png",
       ],
       status: "Found",
@@ -55,8 +55,8 @@ const PersonDetail = ({ params }: { params: { id: string } }) => {
       age: 27,
       images: [
         "/assets/john.png",
-        "/assets/mercy.png",
-        "/assets/jacob.png",
+        "/assets/john.png",
+        "/assets/john.png",
       ],
       status: "Deceased",
       nationality: "Kenyan",
