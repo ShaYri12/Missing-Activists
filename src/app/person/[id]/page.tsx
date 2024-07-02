@@ -1,27 +1,30 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Footer from "../../components/Footer";
 
 const PersonDetail = ({ params }: { params: { id: string } }) => {
-  const [searchTerm, setSearchTerm] = useState<string>(""); // State for search term
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [transitionClass, setTransitionClass] = useState("opacity-100"); // Start with opacity 100 for initial image
 
-  // Replace with actual data fetching logic based on id
-  // For demonstration, using a static person object
   const people = [
     {
       id: "1",
       name: "Jacob Juma",
       gender: "Male",
       age: 27,
-      image: "/assets/jacob.png",
+      images: [
+        "/assets/jacob.png",
+        "/assets/john.png",
+        "/assets/jacob.png",
+      ],
       status: "Missing",
       nationality: "Kenyan",
       phoneNumber: "+254701234567",
       occupation: "Mechanic",
       lastSeen: "18 June ‘24",
       timeSeen: "12:00 PM",
-      otherDetails:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      otherDetails: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus delectus eum, sunt minus ut tenetur laudantium accusantium. Rerum vel, sit nobis eos facere veritatis consequuntur. Deleniti qui illo mollitia quae.",
       contact1: "+2547102345678",
       contact2: "+2547102345678",
     },
@@ -30,15 +33,18 @@ const PersonDetail = ({ params }: { params: { id: string } }) => {
       name: "Mercy Linda",
       gender: "Female",
       age: 27,
-      image: "/assets/mercy.png",
+      images: [
+        "/assets/mercy.png",
+        "/assets/jacob.png",
+        "/assets/mercy.png",
+      ],
       status: "Found",
-      nationality: "Ugandan",
+      nationality: "Kenyan",
       phoneNumber: "+256701234567",
       occupation: "Teacher",
       lastSeen: "12 July ‘24",
       timeSeen: "10:30 AM",
-      otherDetails:
-        "Suspendisse potenti nullam ac tortor vitae purus faucibus ornare suspendisse sed nisi lacus. Vel facilisis volutpat est velit egestas dui id. Sagittis vitae et leo duis ut. Vitae justo eget magna fermentum iaculis eu non diam phasellus. Duis convallis convallis tellus id interdum velit laoreet id donec.",
+      otherDetails: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus delectus eum, sunt minus ut tenetur laudantium accusantium. Rerum vel, sit nobis eos facere veritatis consequuntur. Deleniti qui illo mollitia quae.",
       contact1: "+2567102345678",
       contact2: "+2567102345678",
     },
@@ -47,82 +53,131 @@ const PersonDetail = ({ params }: { params: { id: string } }) => {
       name: "John Kibe",
       gender: "Male",
       age: 27,
-      image: "/assets/john.png",
+      images: [
+        "/assets/john.png",
+        "/assets/mercy.png",
+        "/assets/jacob.png",
+      ],
       status: "Deceased",
-      nationality: "Tanzanian",
+      nationality: "Kenyan",
       phoneNumber: "+255701234567",
       occupation: "Engineer",
       lastSeen: "30 May ‘24",
       timeSeen: "3:45 PM",
-      otherDetails:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      otherDetails: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus delectus eum, sunt minus ut tenetur laudantium accusantium. Rerum vel, sit nobis eos facere veritatis consequuntur. Deleniti qui illo mollitia quae.",
       contact1: "+2557102345678",
       contact2: "+2557102345678",
     },
-    // Add more people as needed
   ];
-  
 
-  // Find the person whose id matches with params.id
   const person = people.find((person) => person.id === params.id);
 
-  // If person not found, handle accordingly
   if (!person) {
     return <p>Person not found</p>;
   }
 
+  const nextImage = () => {
+    setTransitionClass("opacity-0"); // Fade out the current image
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === person.images.length - 1 ? 0 : prevIndex + 1
+      );
+      setTransitionClass("opacity-100"); // Fade in the next image
+    }, 300); // Adjust the timeout as needed for the transition duration
+  };
+
+  const prevImage = () => {
+    setTransitionClass("opacity-0"); // Fade out the current image
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === 0 ? person.images.length - 1 : prevIndex - 1
+      );
+      setTransitionClass("opacity-100"); // Fade in the previous image
+    }, 300); // Adjust the timeout as needed for the transition duration
+  };
+
+  useEffect(() => {
+    // Set initial opacity on component mount
+    setTransitionClass("opacity-100");
+  }, []);
+
   return (
     <div className="min-h-screen w-full text-[#000000] flex flex-col items-center justify-center bg-white">
-      <div className="flex flex-col gap-[16px] px-[15px] py-[24px] w-full">
+      <div className="flex flex-col gap-4 px-4 py-6 w-full">
         <input
           type="text"
           placeholder="Search"
-          className="text-[14px] font-[400] leading-[19.6px] bg-[#EEF3F7] placeholder:text-[#000000] w-full rounded-[5px] py-[7px] px-[14px]"
+          className="text-sm font-normal leading-5 bg-[#EEF3F7] placeholder:text-black w-full rounded py-2 px-4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <div className="flex flex-col gap-[24px] bg-white">
-          <div className="relative h-[400px]">
+        <div className="flex flex-col gap-6 bg-white">
+          <div
+            className="bg-gray-400 relative h-[400px] cursor-pointer"
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const clickX = e.clientX - rect.left;
+              const middle = rect.width / 2;
+
+              if (clickX < middle) {
+                prevImage();
+              } else {
+                nextImage();
+              }
+            }}
+          >
             <img
-              src={person.image}
+              src={person.images[currentImageIndex]}
               alt={person.name}
-              className="w-full h-full object-cover rounded-[10px]"
+              className={`w-full h-full object-cover rounded transition-all duration-500 ${transitionClass}`}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent h-auto to-black opacity-80 rounded-[10px]"></div>
+            <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2">
+              {person.images.map((image, index) => (
+                <div
+                  key={index}
+                  className={`relative w-[8px] h-[8px] rounded-full z-10 transition-all duration-500 ease-in-out ${
+                    index === currentImageIndex ? "bg-[#E8EAED]" : "bg-[#E8EAED]"
+                  }`}
+                >
+                  {index !== currentImageIndex && (
+                    <div className="absolute top-1/2 left-1/2 w-[4px] h-[4px] rounded-full bg-black transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-in-out"></div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-80 rounded"></div>
           </div>
-          <div className="flex flex-col px-[24px] gap-[24px]">
-            <h1 className="text-[32px] font-[700] leading-[44.8px]">
-              {person.name}
-            </h1>
-            <div className="grid grid-cols-2 gap-y-[24px] text-[14px] leading-[19.6px]">
-              <p className="font-[700] w-25">Age:</p>
-              <p className="font-[400]">{person.age}</p>
-              <p className="font-[700]">Gender:</p>
-              <p className="font-[400]">{person.gender}</p>
-              <p className="font-[700]">Status:</p>
-              <p className="font-[400]">{person.status}</p>
-              <p className="font-[700]">Nationality:</p>
-              <p className="font-[400]">{person.nationality}</p>
-              <p className="font-[700]">Phone Number:</p>
-              <p className="font-[400]">{person.phoneNumber}</p>
-              <p className="font-[700]">Occupation:</p>
-              <p className="font-[400]">{person.occupation}</p>
-              <p className="font-[700]">Last Seen:</p>
-              <p className="font-[400]">{person.lastSeen}</p>
-              <p className="font-[700]">Time Seen:</p>
-              <p className="font-[400]">{person.timeSeen}</p>
+          <div className="flex flex-col px-6 gap-6">
+            <h1 className="text-2xl font-bold leading-10">{person.name}</h1>
+            <div className="grid grid-cols-2 gap-y-6 text-sm leading-5">
+              <p className="font-bold">Age:</p>
+              <p className="font-normal">{person.age}</p>
+              <p className="font-bold">Gender:</p>
+              <p className="font-normal">{person.gender}</p>
+              <p className="font-bold">Status:</p>
+              <p className="font-normal">{person.status}</p>
+              <p className="font-bold">Nationality:</p>
+              <p className="font-normal">{person.nationality}</p>
+              <p className="font-bold">Phone Number:</p>
+              <p className="font-normal">{person.phoneNumber}</p>
+              <p className="font-bold">Occupation:</p>
+              <p className="font-normal">{person.occupation}</p>
+              <p className="font-bold">Last Seen:</p>
+              <p className="font-normal">{person.lastSeen}</p>
+              <p className="font-bold">Time Seen:</p>
+              <p className="font-normal">{person.timeSeen}</p>
             </div>
-            <div className="flex flex-col gap-[24px] text-[14px] leading-[19.6px]">
-              <p className="font-[700]">Other Details:</p>
-              <p className="font-[400]">{person.otherDetails}</p>
+            <div className="flex flex-col gap-6 text-sm leading-5">
+              <p className="font-bold">Other Details:</p>
+              <p className="font-normal">{person.otherDetails}</p>
             </div>
-            <div className="flex flex-col gap-[24px] text-[14px] leading-[19.6px]">
-              <p className="font-[700]">Contact:</p>
-              <div className="flex flex-wrap text-[#ffffff] font-[400] gap-[16px]">
-                <p className="py-[10px] px-[16px] rounded-[5px] shadow bg-[#E31F1F] ">
+            <div className="flex flex-col gap-6 text-sm leading-5">
+              <p className="font-bold">Contact:</p>
+              <div className="flex flex-wrap text-white font-normal gap-4">
+                <p className="py-2 px-4 rounded shadow bg-red-600">
                   {person.contact1}
                 </p>
-                <p className="py-[10px] px-[16px] rounded-[5px] shadow bg-[#E31F1F]">
+                <p className="py-2 px-4 rounded shadow bg-red-600">
                   {person.contact2}
                 </p>
               </div>
