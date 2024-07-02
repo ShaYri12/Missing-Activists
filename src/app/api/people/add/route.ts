@@ -1,25 +1,37 @@
-import connectMongoDB from '../../db';
-import Person from '../../models/person'; // Adjust the import path as per your project structure
-import { NextApiResponse } from 'next';
+// pages/api/addPerson.ts
 
-interface IRequest {
-  json: () => Promise<{ name: string; status: 'Missing' | 'Found' | 'Deceased' }>;
-}
+import type { NextApiRequest, NextApiResponse } from 'next';
+import connectDB from '../../db';
+import Person, { IPerson } from '../../models/Person';
 
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
+  await connectDB();
+  
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', ['POST']); // Set allowed methods
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
 
-export async function postHandler(request: IRequest, response: NextApiResponse) {
   try {
-    const { name, status } = await request.json();
+    const { name, status } = req.body;
 
-    await connectMongoDB(); // Assuming this function sets up MongoDB connection
+    // Validate input if needed
+    if (!name || !status) {
+      return res.status(400).json({ error: 'Name and status are required' });
+    }
 
-    // Create a new person document
-    const newPerson = await Person.create({ name, status });
+    // Create new person instance
+    const newPerson: IPerson = new Person({
+      name,
+      status,
+    });
 
-    // Respond with success message and status code 201
-    return response.status(201).json({ message: 'Person Created', data: newPerson });
-  } catch (error: any) {
-    console.error('Failed to create person:', error);
-    return response.status(500).json({ error: 'Failed to create person' });
+    // Save person to database
+    const savedPerson = await newPerson.save();
+
+    return res.status(201).json(savedPerson); // Respond with the saved person data
+  } catch (error) {
+    console.error('Error adding person:', error);
+    return res.status(500).json({ error: 'Error adding person' });
   }
 }

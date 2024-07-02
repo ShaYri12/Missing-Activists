@@ -1,13 +1,13 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IPerson extends Document {
   name: string;
   status: 'Missing' | 'Found' | 'Deceased';
 }
 
-const personSchema: Schema = new Schema(
+const personSchema: Schema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, },
     status: { type: String, enum: ['Missing', 'Found', 'Deceased'], required: true },
   },
   {
@@ -15,6 +15,6 @@ const personSchema: Schema = new Schema(
   }
 );
 
-const Person: Model<IPerson> = mongoose.models.Person || mongoose.model<IPerson>('Person', personSchema);
+const Person = mongoose.models.Person || mongoose.model<IPerson>('Person', personSchema);
 
 export default Person;
