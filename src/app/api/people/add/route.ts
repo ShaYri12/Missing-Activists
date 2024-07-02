@@ -1,23 +1,17 @@
-// pages/api/addPerson.ts
-
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '../../db';
 import Person, { IPerson } from '../../models/Person';
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   await connectDB();
-  
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST']); // Set allowed methods
-    return res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
 
   try {
-    const { name, status } = req.body;
+    const body = await req.json();
+    const { name, status } = body;
 
     // Validate input if needed
     if (!name || !status) {
-      return res.status(400).json({ error: 'Name and status are required' });
+      return NextResponse.json({ error: 'Name and status are required' }, { status: 400 });
     }
 
     // Create new person instance
@@ -29,9 +23,13 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     // Save person to database
     const savedPerson = await newPerson.save();
 
-    return res.status(201).json(savedPerson); // Respond with the saved person data
+    return NextResponse.json(savedPerson, { status: 201 }); // Respond with the saved person data
   } catch (error) {
     console.error('Error adding person:', error);
-    return res.status(500).json({ error: 'Error adding person' });
+    return NextResponse.json({ error: 'Error adding person' }, { status: 500 });
   }
+}
+
+export function OPTIONS() {
+  return NextResponse.json({}, { status: 200, headers: { Allow: 'POST' } });
 }
