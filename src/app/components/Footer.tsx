@@ -53,7 +53,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="/aboutus"
                 className="inline-block hover:underline no-underline"
               >
                 About Us
@@ -69,7 +69,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="/login"
                 className="inline-block hover:underline no-underline"
               >
                 Admin

@@ -10,7 +10,7 @@ const Header = () => {
   };
 
   return (
-    <nav className="bg-white sticky top-0 shadow-custom z-10">
+    <nav className="bg-white sticky top-0 shadow-custom z-50">
       <div className="max-w-6xl mx-auto px-[15px]">
         <div className="flex justify-between h-[68px]">
           <div className="flex items-center text-[#000000]">
