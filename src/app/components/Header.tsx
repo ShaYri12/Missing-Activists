@@ -34,6 +34,8 @@ const Header = () => {
       <div className={`mobile-menu absolute flex flex-col gap-[132px] items-center justify-center h-screen w-full bg-white ${isMenuOpen ? '' : 'hidden'}`}>
         <div className='flex flex-col gap-[40px] items-center justify-center w-auto text-[16px] font-[700] leading-[19.2px] text-[#181818]'>
           <Link href="/" className="block rounded-md hover:underline" onClick={toggleMenu}>Home</Link>
+          <Link href="/addperson" className="block rounded-md hover:underline" onClick={toggleMenu}>Add Person</Link>
+          <Link href="/editperson" className="block rounded-md hover:underline" onClick={toggleMenu}>Edit Person</Link>
           <Link href="/" className="block rounded-md hover:underline" onClick={toggleMenu}>Report</Link>
           <Link href="/aboutus" className="block rounded-md hover:underline" onClick={toggleMenu}>About Us</Link>
           <Link href="/" className="block rounded-md hover:underline" onClick={toggleMenu}>Contact</Link>
