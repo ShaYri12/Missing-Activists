@@ -1,6 +1,7 @@
 'use client';
 import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const EditPerson = () => {
   const fileInputRef1 = useRef<HTMLInputElement>(null);
@@ -114,7 +115,7 @@ const EditPerson = () => {
         setImageUrls(updatedImageUrls);
       } catch (error: any) {
         console.error('Error uploading image to Cloudinary:', error.response?.data || error.message);
-        alert('Error uploading image. Please try again.');
+        toast.error('Error uploading image. Please try again.');
       } finally {
         setUploading(false); // Set uploading state to false after upload completes or fails
       }
@@ -171,11 +172,11 @@ const EditPerson = () => {
     try {
       if (!selectedPerson || !selectedPerson._id) {
         console.error('Selected person or ID is missing.');
-        alert("Selected person or ID is missing.")
+        toast.error("Selected person or ID is missing.")
         return;
       }
       else if (imageUrls.length === 0) {
-        alert('Please upload at least one image.');
+        toast.info('Please upload at least one image.');
         return;
       }    
 
@@ -186,7 +187,7 @@ const EditPerson = () => {
       });
 
       console.log('Person updated successfully', response.data.person);
-      alert("Person Updated Successfully");
+      toast.success("Person Updated Successfully");
 
       setFormData({
         name: response.data.person.name || '',
@@ -225,7 +226,7 @@ const EditPerson = () => {
       });
   
       console.log('Person deleted successfully');
-      alert('Person Deleted Successfully');
+      toast.success('Person Deleted Successfully');
   
       // Clear form data and selected person state
       setFormData({
@@ -246,7 +247,7 @@ const EditPerson = () => {
       setSelectedPerson(null);
     } catch (error) {
       console.error('Error deleting person:', error);
-      alert('Error deleting person. Please try again.');
+      toast.error('Error deleting person. Please try again.');
     }
   };
   

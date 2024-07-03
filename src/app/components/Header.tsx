@@ -61,11 +61,11 @@ const Header = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`mobile-menu absolute top-[68px] left-0 right-0 h-screen overflow-y-auto bg-white ${isMenuOpen ? '' : 'hidden'}`}
+        className={`mobile-menu absolute top-[68px] left-0 right-0 h-screen ${!isLoggedIn && "pt-6"} overflow-y-auto bg-white ${isMenuOpen ? '' : 'hidden'}`}
         style={{ minHeight: '100vh', zIndex: 999 }}
       >
         <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="flex flex-col gap-6 items-center justify-center w-auto text-[16px] font-[700] leading-[19.2px] text-[#181818]">
+          <div className="flex flex-col gap-[40px] items-center justify-center w-auto text-[16px] font-[700] leading-[19.2px] text-[#181818]">
             <Link href="/" className="block rounded-md hover:underline" onClick={toggleMenu}>
               Home
             </Link>
@@ -98,7 +98,7 @@ const Header = () => {
             )}
           </div>
 
-          <div className="flex pt-[132px] items-center justify-center pt-4 gap-4">
+          <div className={`flex items-center justify-center pt-4 gap-4 ${isLoggedIn ? "pt-[60px]" : "pt-[110px]"}`}>
             <a href="/" className="w-[24px] h-[24px]">
               <img src="/assets/x.svg" className="w-full h-full" alt="x" />
             </a>
@@ -115,7 +115,7 @@ const Header = () => {
               <img src="/assets/linkedin.svg" className="w-full h-full" alt="linkedin" />
             </a>
           </div>
-          <p className="text-center pt-[100px] text-[#181818] text-[16px] font-[700] leading-[16px]">
+          <p className={`text-center pt-[100px] text-[#181818] text-[16px] font-[700] leading-[16px] ${isLoggedIn ? "pt-[60px]" : "pt-[110px]"} `}>
           www.<span className="text-[#E31F1F]">missing</span>activists.org
         </p>
         </div>

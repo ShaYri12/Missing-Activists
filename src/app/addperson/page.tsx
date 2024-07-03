@@ -1,6 +1,7 @@
 'use client'
 import React, { useRef, useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 const AddPerson = () => {
   const fileInputRef1 = useRef<HTMLInputElement | null>(null);
   const fileInputRef2 = useRef<HTMLInputElement | null>(null);
@@ -69,7 +70,7 @@ const AddPerson = () => {
         setImageUrls(updatedImageUrls);
       } catch (error) {
         console.error('Error uploading image to Cloudinary:', error);
-        alert('Error uploading image. Please try again.');
+        toast.error('Error uploading image. Please try again.');
       } finally {
         setUploading(false); // Set uploading state to false after upload completes
       }
@@ -101,7 +102,7 @@ const AddPerson = () => {
     e.preventDefault();
      // Check if at least one image is uploaded
   if (imageUrls.length === 0) {
-    alert('Please upload at least one image.');
+    toast.info('Please upload at least one image.');
     return;
   }
 
@@ -114,7 +115,7 @@ const AddPerson = () => {
       console.log('Response from server:', response); // Log the entire response object
 
       if (response.status === 201) {
-        alert('Person added successfully');
+        toast.success('Person added successfully');
         // Reset form and state
         setFormData({
           name: '',
@@ -136,7 +137,7 @@ const AddPerson = () => {
       }
     } catch (error) {
       console.error('Error adding person:', error);
-      alert('Error adding person. Please try again.');
+      toast.error('Error adding person. Please try again.');
     }
   };
 
