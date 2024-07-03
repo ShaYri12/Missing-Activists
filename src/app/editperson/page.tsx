@@ -342,7 +342,7 @@ const EditPerson = () => {
             <input
               type="date"
               placeholder="Last Seen"
-              className="w-full py-[10px] px-[13px] bg-[#EEF3F7] rounded-[5px] text-[14px] font-[400] leading-[19.6px] placeholder-[#00000066]"
+              className={`w-full py-[10px] px-[13px] bg-[#EEF3F7] rounded-[5px] text-[14px] font-[400] leading-[19.6px] placeholder-[#00000066] ${!formData.lastSeen && "text-[#00000066]"} `}
               name="lastSeen"
               value={formData.lastSeen}
               onChange={handleInputChange}
