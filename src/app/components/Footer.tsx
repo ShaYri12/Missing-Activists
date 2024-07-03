@@ -1,6 +1,9 @@
 import React from "react";
+import { useAuth } from '../context/AuthContext';
 
 const Footer = () => {
+  const { isLoggedIn } = useAuth();
+
   return (
     <footer className="bg-white text-[#181818] border-t border-[#00000033] flex flex-col gap-[33px] pb-[35px]">
       <div className="container overflow-hidden flex flex-col gap-[24px]">
@@ -67,6 +70,7 @@ const Footer = () => {
                 Contact
               </a>
             </li>
+            {!isLoggedIn &&
             <li>
               <a
                 href="/login"
@@ -75,6 +79,7 @@ const Footer = () => {
                 Admin
               </a>
             </li>
+            }
           </ul>
         </div>
       </div>

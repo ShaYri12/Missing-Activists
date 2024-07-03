@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from './components/Header';
+import { AuthProvider } from './context/AuthContext';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 export const metadata: Metadata = {
   title: "Missing Activist",
@@ -16,8 +19,16 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-[#545454] text-black flex justify-center">
         <div className="w-full max-w-md relative bg-white shadow-md">
-          <Header />
-          <main>{children}</main>
+          <AuthProvider>
+          <ToastContainer 
+            position="top-center"
+            autoClose={2000}
+            pauseOnHover={true}
+            closeOnClick={true}
+            draggable={true} />
+            <Header />
+            <main>{children}</main>
+          </AuthProvider>
         </div>
       </body>
     </html>
