@@ -1,105 +1,61 @@
-"use client";
+'use client'
 import { useState, useEffect } from "react";
+import axios from "axios";
 import Footer from "../../components/Footer";
 
 const PersonDetail = ({ params }: { params: { id: string } }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [transitionClass, setTransitionClass] = useState("opacity-100"); // Start with opacity 100 for initial image
+  const [person, setPerson] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+  const [transitionClass, setTransitionClass] = useState<string>("opacity-100");
 
-  const people = [
-    {
-      id: "1",
-      name: "Jacob Juma",
-      gender: "Male",
-      age: 27,
-      images: [
-        "/assets/jacob.png",
-        "/assets/jacob.png",
-        "/assets/jacob.png",
-      ],
-      status: "Missing",
-      nationality: "Kenyan",
-      phoneNumber: "+254701234567",
-      occupation: "Mechanic",
-      lastSeen: "18 June ‘24",
-      timeSeen: "12:00 PM",
-      otherDetails: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus delectus eum, sunt minus ut tenetur laudantium accusantium. Rerum vel, sit nobis eos facere veritatis consequuntur. Deleniti qui illo mollitia quae.",
-      contact1: "+2547102345678",
-      contact2: "+2547102345678",
-    },
-    {
-      id: "2",
-      name: "Mercy Linda",
-      gender: "Female",
-      age: 27,
-      images: [
-        "/assets/mercy.png",
-        "/assets/mercy.png",
-        "/assets/mercy.png",
-      ],
-      status: "Found",
-      nationality: "Kenyan",
-      phoneNumber: "+256701234567",
-      occupation: "Teacher",
-      lastSeen: "12 July ‘24",
-      timeSeen: "10:30 AM",
-      otherDetails: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus delectus eum, sunt minus ut tenetur laudantium accusantium. Rerum vel, sit nobis eos facere veritatis consequuntur. Deleniti qui illo mollitia quae.",
-      contact1: "+2567102345678",
-      contact2: "+2567102345678",
-    },
-    {
-      id: "3",
-      name: "John Kibe",
-      gender: "Male",
-      age: 27,
-      images: [
-        "/assets/john.png",
-        "/assets/john.png",
-        "/assets/john.png",
-      ],
-      status: "Deceased",
-      nationality: "Kenyan",
-      phoneNumber: "+255701234567",
-      occupation: "Engineer",
-      lastSeen: "30 May ‘24",
-      timeSeen: "3:45 PM",
-      otherDetails: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus delectus eum, sunt minus ut tenetur laudantium accusantium. Rerum vel, sit nobis eos facere veritatis consequuntur. Deleniti qui illo mollitia quae.",
-      contact1: "+2557102345678",
-      contact2: "+2557102345678",
-    },
-  ];
+  useEffect(() => {
+    const fetchPerson = async () => {
+      try {
+        const response = await axios.post(`/api/people/${params.id}`, { id: params.id });
+        setPerson(response.data.person);
+      } catch (error: any) {
+        setError(error.message || "Failed to fetch person");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const person = people.find((person) => person.id === params.id);
+    fetchPerson();
+  }, [params.id]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   if (!person) {
     return <p>Person not found</p>;
   }
 
   const nextImage = () => {
-    setTransitionClass("opacity-0"); // Fade out the current image
+    setTransitionClass("opacity-0");
     setTimeout(() => {
       setCurrentImageIndex((prevIndex) =>
         prevIndex === person.images.length - 1 ? 0 : prevIndex + 1
       );
-      setTransitionClass("opacity-100"); // Fade in the next image
-    }, 300); // Adjust the timeout as needed for the transition duration
+      setTransitionClass("opacity-100");
+    }, 300);
   };
 
   const prevImage = () => {
-    setTransitionClass("opacity-0"); // Fade out the current image
+    setTransitionClass("opacity-0");
     setTimeout(() => {
       setCurrentImageIndex((prevIndex) =>
         prevIndex === 0 ? person.images.length - 1 : prevIndex - 1
       );
-      setTransitionClass("opacity-100"); // Fade in the previous image
-    }, 300); // Adjust the timeout as needed for the transition duration
+      setTransitionClass("opacity-100");
+    }, 300);
   };
-
-  useEffect(() => {
-    // Set initial opacity on component mount
-    setTransitionClass("opacity-100");
-  }, []);
 
   return (
     <div className="min-h-screen w-full text-[#000000] flex flex-col items-center justify-center bg-white">
@@ -108,8 +64,6 @@ const PersonDetail = ({ params }: { params: { id: string } }) => {
           type="text"
           placeholder="Search"
           className="text-sm font-normal leading-5 bg-[#EEF3F7] placeholder:text-black w-full rounded py-2 px-4"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="flex flex-col gap-6 bg-white">
           <div
@@ -132,7 +86,7 @@ const PersonDetail = ({ params }: { params: { id: string } }) => {
               className={`w-full h-full object-cover rounded transition-all duration-500 ${transitionClass}`}
             />
             <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2">
-              {person.images.map((image, index) => (
+              {person.images.map((image: string, index: number) => (
                 <div
                   key={index}
                   className={`relative w-[8px] h-[8px] rounded-full z-10 transition-all duration-500 ease-in-out ${
@@ -175,10 +129,10 @@ const PersonDetail = ({ params }: { params: { id: string } }) => {
               <p className="font-bold">Contact:</p>
               <div className="flex flex-wrap text-white font-normal gap-4">
                 <p className="py-2 px-4 rounded shadow bg-red-600">
-                  {person.contact1}
+                  +{person.contact1}
                 </p>
                 <p className="py-2 px-4 rounded shadow bg-red-600">
-                  {person.contact2}
+                  +{person.contact2}
                 </p>
               </div>
             </div>

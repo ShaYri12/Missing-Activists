@@ -1,59 +1,44 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Use the next/navigation for app directory
+import { useState, useEffect } from 'react';
 import Footer from './components/Footer';
+import axios from 'axios';
+import Link from 'next/link';
 
 interface Person {
-  id: number;
+  _id: number;
   name: string;
   gender: string;
   age: number;
-  image: string;
+  images: string;
   status: 'Missing' | 'Found' | 'Deceased';
 }
 
 const Home = () => {
-  const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
-  const [people, setPeople] = useState<Person[]>([
-    {
-      id: 1,
-      name: 'Jacob Juma',
-      gender: 'Male',
-      age: 27,
-      image: '/assets/jacob.png',
-      status: 'Missing',
-    },
-    {
-      id: 2,
-      name: 'Mercy Linda',
-      gender: 'Female',
-      age: 27,
-      image: '/assets/mercy.png',
-      status: 'Found',
-    },
-    {
-      id: 3,
-      name: 'John Kibe',
-      gender: 'Male',
-      age: 27,
-      image: '/assets/john.png',
-      status: 'Deceased',
-    },
-  ]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [people, setPeople] = useState<Person[]>([]); // State to hold people data
 
-  const router = useRouter();
+  useEffect(() => {
+    // Fetch data from backend when component mounts
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/api/people'); // Replace with your API URL
+        setPeople(response.data); // Assuming your API returns an array of Person objects
+      } catch (error) {
+        console.error('Error fetching people data:', error);
+        // Handle error
+      }
+    };
+
+    fetchData(); // Call the function to fetch data
+  }, []); // Empty dependency array ensures this effect runs only once on component mount
 
   // Filter people based on search term
   const filteredPeople = people.filter((person) =>
     person.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     person.age.toString().includes(searchTerm.toLowerCase()) ||
     person.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    person.gender.toLowerCase().startsWith(searchTerm.toLowerCase()) // Search by starting characters of gender
+    person.gender.toLowerCase().startsWith(searchTerm.toLowerCase())
   );
-
-  const handlePersonClick = (id: number) => {
-    router.push(`/person/${id}`);
-  };
 
   return (
     <>
@@ -67,26 +52,22 @@ const Home = () => {
         />
         <div className="grid grid-cols-1 gap-[16px] min-h-screen">
           {filteredPeople.map((person) => (
-            <div
-              key={person.id}
-              className="relative bg-white rounded-[10px] cursor-pointer h-[400px] overflow-hidden"
-              onClick={() => handlePersonClick(person.id)}
-            >
-              <img src={person.image} alt={person.name} className="w-full h-full object-cover rounded-md" />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-80"></div>
-              <div className="absolute inset-0 flex flex-col justify-end px-[15px] py-[16px] rounded-md">
-                <div className='flex justify-between items-center'>
-                  <div className='font-[700] text-white'>
-                    <h2 className="text-[20px] leading-[24px]">{person.name}</h2>
-                    <span className='text-[14px] leading-[19.6px] text-[#DFD9D7]'>{person.gender} {person.age}</span>
+            <Link key={person._id} href={`/person/${person._id}`} className="relative bg-white rounded-[10px] cursor-pointer h-[400px] overflow-hidden block">
+                <img src={Array.isArray(person.images) && person.images.length > 0 ? person.images[0] : ''} alt={person.name} className="w-full h-full object-cover rounded-md" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-80"></div>
+                <div className="absolute inset-0 flex flex-col justify-end px-[15px] py-[16px] rounded-md">
+                  <div className='flex justify-between items-center'>
+                    <div className='font-[700] text-white'>
+                      <h2 className="text-[20px] leading-[24px]">{person.name}</h2>
+                      <span className='text-[14px] leading-[19.6px] text-[#DFD9D7]'>{person.gender} {person.age}</span>
+                    </div>
+                    <p className={`rounded-[5px] px-[16px] py-[10px] gap-[10px] text-white ${person.status === 'Missing' ? 'bg-[#E31F1F]' : person.status === 'Found' ? 'bg-[#00AD64]' : 'bg-[#BABABA]'}`}>
+                      {person.status}
+                    </p>
                   </div>
-                  <p className={`rounded-[5px] px-[16px] py-[10px] gap-[10px] text-white ${person.status === 'Missing' ? 'bg-[#E31F1F]' : person.status === 'Found' ? 'bg-[#00AD64]' : 'bg-[#BABABA]'}`}>
-                    {person.status}
-                  </p>
                 </div>
-              </div>
-              <img width={"36px"} src="/assets/Flag_of_Kenya.svg" alt="Kenya Flag" className="absolute top-2 right-2 w-8 h-8" />
-            </div>
+                <img width={"36px"} src="/assets/Flag_of_Kenya.svg" alt="Kenya Flag" className="absolute top-2 right-2 w-8 h-8" />
+            </Link>
           ))}
         </div>
       </div>

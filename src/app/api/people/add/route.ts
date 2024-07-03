@@ -7,17 +7,41 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { name, status } = body;
+    const {
+      name,
+      gender,
+      age,
+      images,
+      nationality,
+      phoneNumber,
+      occupation,
+      lastSeen,
+      timeSeen,
+      otherDetails,
+      contact1,
+      contact2,
+    } = body;
 
     // Validate input if needed
-    if (!name || !status) {
-      return NextResponse.json({ error: 'Name and status are required' }, { status: 400 });
+    if (!name || !gender || !age || !images || !nationality || !phoneNumber || !occupation || !lastSeen || !timeSeen || !otherDetails || !contact1 || !contact2) {
+      return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
     // Create new person instance
     const newPerson: IPerson = new Person({
       name,
-      status,
+      gender,
+      age,
+      images,
+      status: 'Missing',
+      nationality,
+      phoneNumber,
+      occupation,
+      lastSeen,
+      timeSeen,
+      otherDetails,
+      contact1,
+      contact2,
     });
 
     // Save person to database
