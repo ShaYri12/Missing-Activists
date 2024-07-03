@@ -51,7 +51,10 @@ const Home = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="grid grid-cols-1 gap-[16px] min-h-screen">
-          {filteredPeople.map((person) => (
+        {filteredPeople.length === 0 ? (
+            <p className="text-center text-gray-600">No results found.</p>
+          ) : (
+          filteredPeople.map((person) => (
             <Link key={person._id} href={`/person/${person._id}`} className="relative bg-white rounded-[10px] cursor-pointer h-[400px] overflow-hidden block">
                 <img src={Array.isArray(person.images) && person.images.length > 0 ? person.images[0] : ''} alt={person.name} className="w-full h-full object-cover rounded-md" />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-80"></div>
@@ -68,7 +71,7 @@ const Home = () => {
                 </div>
                 <img width={"36px"} src="/assets/Flag_of_Kenya.svg" alt="Kenya Flag" className="absolute top-2 right-2 w-8 h-8" />
             </Link>
-          ))}
+          )))}
         </div>
       </div>
       <Footer />
