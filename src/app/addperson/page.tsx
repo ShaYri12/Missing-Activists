@@ -212,7 +212,7 @@ const AddPerson = () => {
               required
             />
             <input
-              type="text"
+              type="date"
               name="lastSeen"
               placeholder="Last Seen"
               value={formData.lastSeen}
