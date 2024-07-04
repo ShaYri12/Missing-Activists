@@ -22,7 +22,7 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/api/people'); // Replace with your API URL
-        setPeople(response.data); // Assuming your API returns an array of Person objects
+        setPeople(response.data || ''); // Assuming your API returns an array of Person objects
       } catch (error) {
         console.error('Error fetching people data:', error);
         // Handle error
