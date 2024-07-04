@@ -22,7 +22,13 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/api/people'); // Replace with your API URL
-        setPeople(response.data || ''); // Assuming your API returns an array of Person objects
+        console.log('API Response:', response.data); // Log the response
+        if (Array.isArray(response.data)) {
+          setPeople(response.data); // Assuming your API returns an array of Person objects
+        } else {
+          console.error('API did not return an array:', response.data);
+          // Handle unexpected response format
+        }
       } catch (error) {
         console.error('Error fetching people data:', error);
         // Handle error
@@ -33,12 +39,12 @@ const Home = () => {
   }, []); // Empty dependency array ensures this effect runs only once on component mount
 
   // Filter people based on search term
-  const filteredPeople = people.filter((person) =>
+  const filteredPeople = Array.isArray(people) ? people.filter((person) =>
     person.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     person.age.toString().includes(searchTerm.toLowerCase()) ||
     person.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
     person.gender.toLowerCase().startsWith(searchTerm.toLowerCase())
-  );
+  ) : [];
 
   return (
     <>
@@ -51,11 +57,11 @@ const Home = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="grid grid-cols-1 gap-[16px] min-h-screen">
-        {filteredPeople.length === 0 ? (
+          {filteredPeople.length === 0 ? (
             <p className="text-center text-gray-600">No results found.</p>
           ) : (
-          filteredPeople.map((person) => (
-            <Link key={person._id} href={`/person/${person._id}`} className="relative bg-white rounded-[10px] cursor-pointer h-[400px] overflow-hidden block">
+            filteredPeople.map((person) => (
+              <Link key={person._id} href={`/person/${person._id}`} className="relative bg-white rounded-[10px] cursor-pointer h-[400px] overflow-hidden block">
                 <img src={Array.isArray(person.images) && person.images.length > 0 ? person.images[0] : ''} alt={person.name} className="w-full h-full object-cover rounded-md" />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-80"></div>
                 <div className="absolute inset-0 flex flex-col justify-end px-[15px] py-[16px] rounded-md">
@@ -70,8 +76,9 @@ const Home = () => {
                   </div>
                 </div>
                 <img width={"36px"} src="/assets/Flag_of_Kenya.svg" alt="Kenya Flag" className="absolute top-2 right-2 w-8 h-8" />
-            </Link>
-          )))}
+              </Link>
+            ))
+          )}
         </div>
       </div>
       <Footer />
