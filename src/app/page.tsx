@@ -16,6 +16,7 @@ interface Person {
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [people, setPeople] = useState<Person[]>([]); // State to hold people data
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
 
   useEffect(() => {
     // Fetch data from backend when component mounts
@@ -32,6 +33,8 @@ const Home = () => {
       } catch (error) {
         console.error('Error fetching people data:', error);
         // Handle error
+      } finally {
+        setLoading(false); // Set loading to false regardless of success or failure
       }
     };
 
@@ -57,7 +60,9 @@ const Home = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="grid grid-cols-1 gap-[16px] min-h-screen">
-          {filteredPeople.length === 0 ? (
+          {loading ? (
+            <p className="text-center text-gray-600">Loading...</p>
+          ) : filteredPeople.length === 0 ? (
             <p className="text-center text-gray-600">No results found.</p>
           ) : (
             filteredPeople.map((person) => (
