@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '../../db';
-import Person, { IPerson } from '../../models/Person';
+import Person, { IPerson }  from '@/app/api/models/Person';
 
 export async function POST(req: NextRequest) {
   await connectDB();
