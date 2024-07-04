@@ -14,8 +14,10 @@ async function dbConnect() {
     }
 
     const db = await mongoose.connect(process.env.MONGODB_URI, {
-      connectTimeoutMS: 30000, // 30 seconds
-      serverSelectionTimeoutMS: 30000 // 30 seconds
+      connectTimeoutMS: 60000, // 60 seconds
+      serverSelectionTimeoutMS: 60000, // 60 seconds
+      socketTimeoutMS: 60000, // 60 seconds
+      family: 4, // Use IPv4, skip trying IPv6
     });
 
     connection.isConnected = db.connections[0].readyState;
