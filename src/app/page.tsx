@@ -33,7 +33,7 @@ const Home = () => {
   }, []); // Empty dependency array ensures this effect runs only once on component mount
 
   // Filter people based on search term
-  const filteredPeople = people?.filter((person) =>
+  const filteredPeople = people.filter((person) =>
     person.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     person.age.toString().includes(searchTerm.toLowerCase()) ||
     person.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
